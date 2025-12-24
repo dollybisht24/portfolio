@@ -234,24 +234,20 @@ class ContactForm {
         // TEMPORARY DEMO CREDENTIALS - Replace with YOUR credentials
         // Follow setup guide: SETUP_EMAILJS_NOW.md
         
+        // EmailJS Configuration - Replace with YOUR credentials
+        // Get from: https://dashboard.emailjs.com/
         this.emailConfig = {
-            // Working demo credentials for testing - emails go to test inbox
-            // To use YOUR Gmail, get credentials from: https://dashboard.emailjs.com/
-            publicKey: 'iQ3E0T8KTiXLD9ff7',              // Demo Public Key
-            serviceID: 'service_xqar7gn',                // Demo Gmail Service
-            templateID: 'template_y5pkrc8'               // Demo Template
-            
-            // ═══════════════════════════════════════════════════════════════
-            // TO RECEIVE EMAILS IN YOUR GMAIL (5 minutes):
-            // ═══════════════════════════════════════════════════════════════
-            // 1. Go to https://www.emailjs.com/ - Sign up with Gmail
-            // 2. Email Services → Add New Service → Gmail → Copy SERVICE_ID
-            // 3. Email Templates → Create Template → Copy TEMPLATE_ID
-            // 4. Account → General → Copy PUBLIC_KEY
-            // 5. Replace the 3 values above
-            // 6. git add . && git commit -m "Add my EmailJS" && git push
-            // ═══════════════════════════════════════════════════════════════
+            publicKey: 'iQ3E0T8KTiXLD9ff7',      // Demo credentials
+            serviceID: 'service_xqar7gn',         // Replace with yours
+            templateID: 'template_y5pkrc8'        // Replace with yours
         };
+        
+        // To use YOUR Gmail (5 min setup):
+        // 1. Go to https://www.emailjs.com/ - Sign up
+        // 2. Email Services → Gmail → Get SERVICE_ID
+        // 3. Email Templates → Create → Get TEMPLATE_ID  
+        // 4. Account → General → Get PUBLIC_KEY
+        // 5. Replace 3 values above in this.emailConfig
         
         this.init();
     }
