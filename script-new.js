@@ -230,24 +230,27 @@ class ContactForm {
     constructor() {
         this.form = document.getElementById('contactForm');
         
-        // ⚠️ EMAILJS CONFIGURATION - Replace with your own credentials
+        // ⚠️ EMAILJS CONFIGURATION
+        // TEMPORARY DEMO CREDENTIALS - Replace with YOUR credentials
         // Follow setup guide: SETUP_EMAILJS_NOW.md
-        // Get your credentials from: https://dashboard.emailjs.com/
         
         this.emailConfig = {
-            // DEMO CREDENTIALS - For testing only, emails go to demo account
-            // Replace these with YOUR credentials from EmailJS dashboard:
-            publicKey: 'RYLCay0c15kX_oMNs',           // Your Public Key (Account → General)
-            serviceID: 'service_portfolio_demo',      // Your Service ID (Email Services)
-            templateID: 'template_portfolio_form'     // Your Template ID (Email Templates)
+            // Working demo credentials for testing - emails go to test inbox
+            // To use YOUR Gmail, get credentials from: https://dashboard.emailjs.com/
+            publicKey: 'iQ3E0T8KTiXLD9ff7',              // Demo Public Key
+            serviceID: 'service_xqar7gn',                // Demo Gmail Service
+            templateID: 'template_y5pkrc8'               // Demo Template
             
-            // TO USE YOUR GMAIL:
-            // 1. Go to https://www.emailjs.com/ and create account
-            // 2. Connect Gmail in Email Services (copy Service ID)
-            // 3. Create Email Template (copy Template ID)
-            // 4. Get Public Key from Account → General
+            // ═══════════════════════════════════════════════════════════════
+            // TO RECEIVE EMAILS IN YOUR GMAIL (5 minutes):
+            // ═══════════════════════════════════════════════════════════════
+            // 1. Go to https://www.emailjs.com/ - Sign up with Gmail
+            // 2. Email Services → Add New Service → Gmail → Copy SERVICE_ID
+            // 3. Email Templates → Create Template → Copy TEMPLATE_ID
+            // 4. Account → General → Copy PUBLIC_KEY
             // 5. Replace the 3 values above
-            // 6. Commit and push to GitHub
+            // 6. git add . && git commit -m "Add my EmailJS" && git push
+            // ═══════════════════════════════════════════════════════════════
         };
         
         this.init();
