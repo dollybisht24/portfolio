@@ -1955,6 +1955,18 @@ section {
     display: none;
     font-size: 0.95rem;
     text-align: center;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .form-message.success {
@@ -1968,6 +1980,49 @@ section {
     display: block;
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid #ef4444;
+    color: #ef4444;
+}
+
+/* Error Message Styles */
+.error-message {
+    display: none;
+    color: #ef4444;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+
+.error-message.show {
+    display: block;
+}
+
+.form-group input.error,
+.form-group textarea.error {
+    border-color: #ef4444 !important;
+}
+
+.form-group input.success,
+.form-group textarea.success {
+    border-color: #10b981 !important;
+}
+
+/* Loading State */
+#submitBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#submitBtn.loading #btnIcon {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
     color: #ef4444;
 }
 

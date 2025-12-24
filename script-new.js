@@ -235,88 +235,169 @@ class ContactForm {
     init() {
         if (!this.form) return;
 
+        // Initialize EmailJS with your public key
+        emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your EmailJS public key
+
         this.form.addEventListener('submit', (e) => {
             e.preventDefault();
-            this.handleSubmit();
+            this.handleSubmit(e);
         });
 
-        // Add input validation
+        // Real-time validation
         const inputs = this.form.querySelectorAll('input, textarea');
         inputs.forEach(input => {
-            input.addEventListener('blur', () => this.validateInput(input));
+            input.addEventListener('blur', () => this.validateField(input));
+            input.addEventListener('input', () => {
+                if (input.classList.contains('error')) {
+                    this.validateField(input);
+                }
+            });
         });
     }
 
-    validateInput(input) {
-        if (input.hasAttribute('required') && !input.value.trim()) {
-            input.style.borderColor = 'var(--error)';
-            return false;
+    validateField(field) {
+        const value = field.value.trim();
+        const fieldName = field.name;
+        let isValid = true;
+        let errorMsg = '';
+
+        // Clear previous errors
+        field.classList.remove('error', 'success');
+        const errorElement = document.getElementById(fieldName + 'Error') || 
+                            document.getElementById(fieldName.replace('from_', '') + 'Error');
+        
+        if (errorElement) {
+            errorElement.classList.remove('show');
+            errorElement.textContent = '';
         }
 
-        if (input.type === 'email' && input.value) {
+        // Check if field is empty
+        if (!value) {
+            isValid = false;
+            errorMsg = 'This field is required';
+        }
+        // Validate email
+        else if (fieldName === 'from_email') {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(input.value)) {
-                input.style.borderColor = 'var(--error)';
-                return false;
+            if (!emailRegex.test(value)) {
+                isValid = false;
+                errorMsg = 'Please enter a valid email address';
             }
         }
+        // Validate name length
+        else if (fieldName === 'from_name' && value.length < 2) {
+            isValid = false;
+            errorMsg = 'Name must be at least 2 characters';
+        }
+        // Validate subject length
+        else if (fieldName === 'subject' && value.length < 3) {
+            isValid = false;
+            errorMsg = 'Subject must be at least 3 characters';
+        }
+        // Validate message length
+        else if (fieldName === 'message' && value.length < 10) {
+            isValid = false;
+            errorMsg = 'Message must be at least 10 characters';
+        }
 
-        input.style.borderColor = 'var(--success)';
-        return true;
+        // Show error or success
+        if (!isValid) {
+            field.classList.add('error');
+            if (errorElement) {
+                errorElement.textContent = errorMsg;
+                errorElement.classList.add('show');
+            }
+        } else if (value) {
+            field.classList.add('success');
+        }
+
+        return isValid;
     }
 
-    handleSubmit() {
-        const formData = new FormData(this.form);
-        const data = Object.fromEntries(formData);
-
-        // Validate all inputs
-        const inputs = this.form.querySelectorAll('input, textarea');
+    validateForm() {
+        const inputs = this.form.querySelectorAll('input[required], textarea[required]');
         let isValid = true;
 
         inputs.forEach(input => {
-            if (!this.validateInput(input)) {
+            if (!this.validateField(input)) {
                 isValid = false;
             }
         });
 
-        if (!isValid) {
-            this.showNotification('Please fill in all required fields correctly.', 'error');
+        return isValid;
+    }
+
+    showMessage(message, type = 'success') {
+        const messageDiv = document.getElementById('formMessage');
+        messageDiv.textContent = message;
+        messageDiv.className = 'form-message ' + type;
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            messageDiv.className = 'form-message';
+        }, 5000);
+    }
+
+    async handleSubmit(e) {
+        e.preventDefault();
+
+        // Validate form
+        if (!this.validateForm()) {
+            this.showMessage('Please fix the errors before submitting', 'error');
             return;
         }
 
+        // Get button elements
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnIcon = document.getElementById('btnIcon');
+        
         // Show loading state
-        const submitBtn = this.form.querySelector('#submitBtn');
-        const btnText = submitBtn.querySelector('#btnText');
-        const originalText = btnText.textContent;
-        btnText.textContent = 'Sending...';
         submitBtn.disabled = true;
+        submitBtn.classList.add('loading');
+        btnText.textContent = 'Sending...';
+        btnIcon.className = 'fas fa-spinner';
 
-        // Submit to Netlify Forms
-        fetch('/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams(formData).toString()
-        })
-        .then(response => {
-            if (response.ok) {
-                this.showNotification('Message sent successfully! I\'ll get back to you soon.', 'success');
-                this.form.reset();
-                // Reset input styles
-                inputs.forEach(input => {
-                    input.style.borderColor = '';
-                });
-            } else {
-                throw new Error('Form submission failed');
+        try {
+            // Send email using EmailJS
+            const response = await emailjs.sendForm(
+                'YOUR_SERVICE_ID',     // Replace with your EmailJS service ID
+                'YOUR_TEMPLATE_ID',    // Replace with your EmailJS template ID
+                this.form
+            );
+
+            console.log('SUCCESS!', response.status, response.text);
+            
+            // Show success message
+            this.showMessage('Message sent successfully! I\'ll get back to you soon.', 'success');
+            
+            // Reset form
+            this.form.reset();
+            
+            // Remove all validation classes
+            const inputs = this.form.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.classList.remove('error', 'success');
+            });
+
+        } catch (error) {
+            console.error('FAILED...', error);
+            
+            // Show error message
+            let errorMessage = 'Failed to send message. Please try again or email me directly.';
+            
+            if (error.text) {
+                errorMessage = error.text;
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            this.showNotification('Failed to send message. Please try again or email me directly.', 'error');
-        })
-        .finally(() => {
-            btnText.textContent = originalText;
+            
+            this.showMessage(errorMessage, 'error');
+        } finally {
+            // Reset button state
             submitBtn.disabled = false;
-        });
+            submitBtn.classList.remove('loading');
+            btnText.textContent = 'Send Message';
+            btnIcon.className = 'fas fa-paper-plane';
+        }
     }
 
     showNotification(message, type = 'success') {
