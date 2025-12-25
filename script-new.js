@@ -230,24 +230,24 @@ class ContactForm {
     constructor() {
         this.form = document.getElementById('contactForm');
         
-        // ⚠️ EMAILJS CONFIGURATION
-        // TEMPORARY DEMO CREDENTIALS - Replace with YOUR credentials
-        // Follow setup guide: SETUP_EMAILJS_NOW.md
+        // ⚠️ EMAILJS CONFIGURATION - DUAL EMAIL SYSTEM
+        // Follow complete setup guide: COMPLETE_EMAILJS_SETUP.md
         
-        // EmailJS Configuration - Replace with YOUR credentials
-        // Get from: https://dashboard.emailjs.com/
         this.emailConfig = {
-            publicKey: 'iQ3E0T8KTiXLD9ff7',      // Demo credentials
-            serviceID: 'service_xqar7gn',         // Replace with yours
-            templateID: 'template_y5pkrc8'        // Replace with yours
+            publicKey: 'YOUR_PUBLIC_KEY_HERE',
+            serviceID: 'YOUR_SERVICE_ID_HERE',
+            notificationTemplateID: 'YOUR_NOTIFICATION_TEMPLATE_ID',  // Email to you
+            autoReplyTemplateID: 'YOUR_AUTOREPLY_TEMPLATE_ID'        // Email to user
         };
         
-        // To use YOUR Gmail (5 min setup):
-        // 1. Go to https://www.emailjs.com/ - Sign up
-        // 2. Email Services → Gmail → Get SERVICE_ID
-        // 3. Email Templates → Create → Get TEMPLATE_ID  
-        // 4. Account → General → Get PUBLIC_KEY
-        // 5. Replace 3 values above in this.emailConfig
+        // Quick Setup (15 min):
+        // 1. Go to https://www.emailjs.com/ and sign up
+        // 2. Connect Gmail service → Get SERVICE_ID
+        // 3. Create Template #1 (notification to you) → Get TEMPLATE_ID
+        // 4. Create Template #2 (auto-reply to user) → Get TEMPLATE_ID
+        // 5. Get PUBLIC_KEY from Account settings
+        // 6. Replace the 4 values above
+        // 7. See COMPLETE_EMAILJS_SETUP.md for detailed instructions
         
         this.init();
     }
@@ -379,17 +379,23 @@ class ContactForm {
         }
 
         // Check if credentials are configured
-        if (this.emailConfig.publicKey === 'YOUR_PUBLIC_KEY' || 
-            this.emailConfig.serviceID === 'YOUR_SERVICE_ID' || 
-            this.emailConfig.templateID === 'YOUR_TEMPLATE_ID') {
-            this.showMessage('⚠️ EmailJS not configured yet. Please set up your credentials in script-new.js', 'error');
-            console.error('EmailJS Configuration Required!');
-            console.log('Follow these steps:');
-            console.log('1. Go to https://www.emailjs.com/ and create an account');
-            console.log('2. Connect your Gmail in Email Services');
-            console.log('3. Create an Email Template');
-            console.log('4. Get your Public Key from Account settings');
-            console.log('5. Update emailConfig in script-new.js (line 233-237)');
+        if (this.emailConfig.publicKey === 'YOUR_PUBLIC_KEY_HERE' || 
+            this.emailConfig.serviceID === 'YOUR_SERVICE_ID_HERE' || 
+            this.emailConfig.notificationTemplateID === 'YOUR_NOTIFICATION_TEMPLATE_ID' ||
+            this.emailConfig.autoReplyTemplateID === 'YOUR_AUTOREPLY_TEMPLATE_ID') {
+            this.showMessage('⚠️ EmailJS not configured. Please check COMPLETE_EMAILJS_SETUP.md', 'error');
+            console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            console.error('❌ EmailJS Configuration Required!');
+            console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            console.log('📖 Follow the setup guide: COMPLETE_EMAILJS_SETUP.md');
+            console.log('');
+            console.log('Quick Steps:');
+            console.log('1. Go to https://www.emailjs.com/');
+            console.log('2. Sign up with your Gmail');
+            console.log('3. Create email service and 2 templates');
+            console.log('4. Get your credentials (Public Key, Service ID, 2 Template IDs)');
+            console.log('5. Update emailConfig in script-new.js');
+            console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
             return;
         }
 
@@ -402,21 +408,46 @@ class ContactForm {
         submitBtn.disabled = true;
         submitBtn.classList.add('loading');
         btnText.textContent = 'Sending...';
-        btnIcon.className = 'fas fa-spinner';
+        btnIcon.className = 'fas fa-spinner fa-spin';
 
         try {
-            // Send email using EmailJS
-            const response = await emailjs.sendForm(
+            // Get form data
+            const formData = {
+                from_name: this.form.from_name.value.trim(),
+                from_email: this.form.from_email.value.trim(),
+                subject: this.form.subject.value.trim(),
+                message: this.form.message.value.trim()
+            };
+
+            // Send Email #1: Notification to you
+            console.log('📧 Sending notification email to owner...');
+            const notificationResponse = await emailjs.send(
                 this.emailConfig.serviceID,
-                this.emailConfig.templateID,
-                this.form,
+                this.emailConfig.notificationTemplateID,
+                formData,
                 this.emailConfig.publicKey
             );
+            console.log('✅ Notification email sent!', notificationResponse.status);
 
-            console.log('✅ Email sent successfully!', response.status, response.text);
+            // Send Email #2: Auto-reply to user
+            console.log('📧 Sending auto-reply to user...');
+            const autoReplyResponse = await emailjs.send(
+                this.emailConfig.serviceID,
+                this.emailConfig.autoReplyTemplateID,
+                formData,
+                this.emailConfig.publicKey
+            );
+            console.log('✅ Auto-reply sent!', autoReplyResponse.status);
+
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            console.log('🎉 SUCCESS! Both emails sent successfully!');
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
             
             // Show success message
-            this.showMessage('✅ Message sent successfully! I\'ll get back to you soon.', 'success');
+            this.showMessage('✅ Message sent successfully! Check your email for confirmation.', 'success');
+            
+            // Show notification
+            this.showNotification('Your message has been sent! You should receive a confirmation email shortly.', 'success');
             
             // Reset form
             this.form.reset();
@@ -428,29 +459,42 @@ class ContactForm {
             });
 
         } catch (error) {
-            console.error('❌ Email sending failed:', error);
+            console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            console.error('❌ Email Sending Failed');
+            console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            console.error('Error Details:', error);
             
-            // Show detailed error message
             let errorMessage = 'Failed to send message. ';
             
+            // Parse error details
             if (error.text) {
+                console.error('Error Text:', error.text);
                 errorMessage += error.text;
             } else if (error.message) {
+                console.error('Error Message:', error.message);
                 errorMessage += error.message;
-            } else {
-                errorMessage += 'Please try again or email me directly.';
             }
             
-            // Check for common errors
-            if (error.text && error.text.includes('Public Key')) {
-                errorMessage = '⚠️ Invalid EmailJS Public Key. Please check your configuration.';
-            } else if (error.text && error.text.includes('Service ID')) {
-                errorMessage = '⚠️ Invalid Service ID. Please check your EmailJS settings.';
-            } else if (error.text && error.text.includes('Template')) {
-                errorMessage = '⚠️ Invalid Template ID. Please check your EmailJS template.';
+            // Check for specific errors
+            if (error.text && error.text.toLowerCase().includes('public key')) {
+                errorMessage = '⚠️ Invalid Public Key. Please check your EmailJS configuration.';
+                console.error('💡 Fix: Update publicKey in emailConfig');
+            } else if (error.text && error.text.toLowerCase().includes('service')) {
+                errorMessage = '⚠️ Invalid Service ID. Please check your EmailJS service.';
+                console.error('💡 Fix: Update serviceID in emailConfig');
+            } else if (error.text && error.text.toLowerCase().includes('template')) {
+                errorMessage = '⚠️ Invalid Template ID. Please check your EmailJS templates.';
+                console.error('💡 Fix: Update template IDs in emailConfig');
+            } else if (error.status === 0 || error.message === 'Failed to fetch') {
+                errorMessage = '⚠️ Network error. Please check your internet connection.';
+            } else if (!error.text && !error.message) {
+                errorMessage = 'Please try again or contact me directly at dollybisht408@gmail.com';
             }
             
             this.showMessage(errorMessage, 'error');
+            this.showNotification(errorMessage, 'error');
+            console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            
         } finally {
             // Reset button state
             submitBtn.disabled = false;
