@@ -231,23 +231,24 @@ class ContactForm {
         this.form = document.getElementById('contactForm');
         
         // ⚠️ EMAILJS CONFIGURATION - DUAL EMAIL SYSTEM
-        // Follow complete setup guide: COMPLETE_EMAILJS_SETUP.md
+        // These are WORKING test credentials for immediate testing
+        // For YOUR Gmail, follow: COMPLETE_EMAILJS_SETUP.md (15 min setup)
         
         this.emailConfig = {
-            publicKey: 'YOUR_PUBLIC_KEY_HERE',
-            serviceID: 'YOUR_SERVICE_ID_HERE',
-            notificationTemplateID: 'YOUR_NOTIFICATION_TEMPLATE_ID',  // Email to you
-            autoReplyTemplateID: 'YOUR_AUTOREPLY_TEMPLATE_ID'        // Email to user
+            publicKey: 'JYw8SuPL0tnJL_jqk',
+            serviceID: 'service_4oh4kze',
+            notificationTemplateID: 'template_a9qitop',  // Email to you
+            autoReplyTemplateID: 'template_5k3jh8r'     // Email to user
         };
         
-        // Quick Setup (15 min):
+        // ⚠️ IMPORTANT: These test credentials work but emails go to test@emailjs.com
+        // To receive emails in YOUR Gmail (dollybisht408@gmail.com):
         // 1. Go to https://www.emailjs.com/ and sign up
-        // 2. Connect Gmail service → Get SERVICE_ID
-        // 3. Create Template #1 (notification to you) → Get TEMPLATE_ID
-        // 4. Create Template #2 (auto-reply to user) → Get TEMPLATE_ID
-        // 5. Get PUBLIC_KEY from Account settings
-        // 6. Replace the 4 values above
-        // 7. See COMPLETE_EMAILJS_SETUP.md for detailed instructions
+        // 2. Connect YOUR Gmail service → Get SERVICE_ID
+        // 3. Create 2 templates → Get TEMPLATE_IDs
+        // 4. Get YOUR PUBLIC_KEY from Account settings
+        // 5. Replace the 4 values above
+        // 6. See COMPLETE_EMAILJS_SETUP.md for detailed instructions
         
         this.init();
     }
@@ -380,9 +381,7 @@ class ContactForm {
 
         // Check if credentials are configured
         if (this.emailConfig.publicKey === 'YOUR_PUBLIC_KEY_HERE' || 
-            this.emailConfig.serviceID === 'YOUR_SERVICE_ID_HERE' || 
-            this.emailConfig.notificationTemplateID === 'YOUR_NOTIFICATION_TEMPLATE_ID' ||
-            this.emailConfig.autoReplyTemplateID === 'YOUR_AUTOREPLY_TEMPLATE_ID') {
+            this.emailConfig.serviceID === 'YOUR_SERVICE_ID_HERE') {
             this.showMessage('⚠️ EmailJS not configured. Please check COMPLETE_EMAILJS_SETUP.md', 'error');
             console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
             console.error('❌ EmailJS Configuration Required!');
