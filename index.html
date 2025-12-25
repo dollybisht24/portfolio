@@ -562,6 +562,7 @@
                         <h3>Machine Learning Course</h3>
                         <p class="cert-issuer">Udacity</p>
                         <p class="cert-desc">Fundamentals of ML algorithms and applications</p>
+                        <button class="btn btn-primary cert-view-btn" data-cert="ml-certificate.jpg">View Certificate</button>
                     </div>
                     <div class="cert-badge">
                         <i class="fas fa-certificate"></i>
@@ -576,6 +577,7 @@
                         <h3>Prompt Engineering</h3>
                         <p class="cert-issuer">Professional Certificate</p>
                         <p class="cert-desc">Advanced AI prompt engineering techniques</p>
+                        <button class="btn btn-primary cert-view-btn" data-cert="prompt-certificate.jpg">View Certificate</button>
                     </div>
                     <div class="cert-badge">
                         <i class="fas fa-certificate"></i>
@@ -590,6 +592,7 @@
                         <h3>IAYP Certificate</h3>
                         <p class="cert-issuer">International Award for Young People</p>
                         <p class="cert-desc">Leadership and community service recognition</p>
+                        <button class="btn btn-primary cert-view-btn" data-cert="iayp-certificate.jpg">View Certificate</button>
                     </div>
                     <div class="cert-badge">
                         <i class="fas fa-certificate"></i>
@@ -597,7 +600,15 @@
                 </div>
             </div>
         </div>
-    </section>
+        </section>
+
+        <!-- Certificate Modal -->
+        <div id="certificateModal" class="cert-modal" style="display:none;">
+            <div class="cert-modal-content">
+                <span class="cert-modal-close" id="certModalClose">&times;</span>
+                <img id="certModalImg" src="" alt="Certificate Image" class="cert-modal-img" />
+            </div>
+        </div>
 
     <!-- GitHub Statistics Section -->
     <section id="github-stats" class="github-stats">
@@ -642,15 +653,7 @@
                              class="github-stat-img activity-graph">
                     </div>
                 </div>
-                <!-- GitHub Profile Trophy -->
-                <div class="github-stats-showcase">
-                    <div class="stats-card-wrapper full-width">
-                        <img src="https://github-profile-trophy.vercel.app/?username=dollybisht24&theme=tokyonight&no-frame=true&no-bg=true&column=7&margin-w=15&margin-h=15" 
-                             alt="Dolly's GitHub Trophies" 
-                             loading="lazy"
-                             class="github-stat-img trophies">
-                    </div>
-                </div>
+                <!-- GitHub Profile Trophy section removed -->
                 
                 <!-- Real Contribution Graph -->
                 <div class="github-stats-showcase">
@@ -832,5 +835,26 @@
     </footer>
 
         <script src="script-new.js"></script>
+        <script>
+        // Certificate Modal Logic
+        document.querySelectorAll('.cert-view-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const cert = this.getAttribute('data-cert');
+                document.getElementById('certModalImg').src = 'images/certificates/' + cert;
+                document.getElementById('certificateModal').style.display = 'flex';
+            });
+        });
+        document.getElementById('certModalClose').onclick = function() {
+            document.getElementById('certificateModal').style.display = 'none';
+            document.getElementById('certModalImg').src = '';
+        };
+        window.onclick = function(event) {
+            const modal = document.getElementById('certificateModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+                document.getElementById('certModalImg').src = '';
+            }
+        };
+        </script>
 </body>
 </html>
