@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from '../Router';
+import { Link, navigate } from '../Router';
 import './Certifications.css';
 
 const Certifications = () => {
@@ -72,6 +72,40 @@ const Certifications = () => {
     };
   }, []);
 
+  // Modal state and URL-sync
+  const [modalImg, setModalImg] = useState(null);
+  const [modalTitle, setModalTitle] = useState('');
+
+  useEffect(() => {
+    const syncFromUrl = () => {
+      const params = new URLSearchParams(window.location.search);
+      const img = params.get('img');
+      const title = params.get('title');
+      if (img) {
+        setModalImg(img);
+        setModalTitle(title || 'Certificate');
+      } else {
+        setModalImg(null);
+        setModalTitle('');
+      }
+    };
+
+    syncFromUrl();
+    window.addEventListener('popstate', syncFromUrl);
+    return () => window.removeEventListener('popstate', syncFromUrl);
+  }, []);
+
+  const openModal = (cert) => {
+    const img = cert.image;
+    const title = cert.title;
+    navigate(`/certifications?img=${encodeURIComponent(img)}&title=${encodeURIComponent(title)}`);
+    // navigate will trigger popstate which syncs modal
+  };
+
+  const closeModal = () => {
+    navigate('/certifications');
+  };
+
   return (
     <section id="certifications" className="certifications" aria-labelledby="certifications-heading" ref={sectionRef}>
       <div className="container">
@@ -97,7 +131,7 @@ const Certifications = () => {
                 <p className="cert-description">{cert.description}</p>
                 {cert.image && (
                   <div className="cert-actions">
-                    <Link to={`/certificate?img=${encodeURIComponent(cert.image)}&title=${encodeURIComponent(cert.title)}`} className="btn-view">View Certificate</Link>
+                    <button onClick={() => openModal(cert)} className="btn-view">View Certificate</button>
                   </div>
                 )}
               </div>
@@ -105,6 +139,15 @@ const Certifications = () => {
           ))}
         </div>
       </div>
+      {modalImg && (
+        <div className="cert-modal" role="dialog" aria-modal="true" aria-label={modalTitle} onClick={closeModal}>
+          <div className="cert-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="cert-modal-close" onClick={closeModal} aria-label="Close">×</button>
+            <h3 className="section-title" style={{ marginBottom: 12 }}>{modalTitle}</h3>
+            <img src={modalImg} alt={modalTitle} style={{ maxWidth: '100%', borderRadius: 8 }} />
+          </div>
+        </div>
+      )}
     </section>
   );
 };
