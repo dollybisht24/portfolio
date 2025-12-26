@@ -53,6 +53,13 @@
   overflow: hidden;
 }
 
+.certification-card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  cursor: pointer;
+}
+
 .certification-card::before {
   content: '';
   position: absolute;

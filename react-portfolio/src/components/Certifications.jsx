@@ -111,33 +111,37 @@ const Certifications = () => {
       <div className="container">
         <h2 id="certifications-heading" className="section-title">Certifications</h2>
         <div className="certifications-grid">
-          {certifications.map((cert, index) => (
-            <div 
-              key={index} 
-              className={`certification-card ${visibleCards.includes(index) ? 'animate-scale-in visible' : ''}`}
-              style={{ animationDelay: `${index * 0.2}s` }}
-            >
-              <div className="cert-icon" style={{ background: `linear-gradient(135deg, ${cert.color} 0%, #8b5cf6 100%)` }}>
-                <i className={cert.icon}></i>
-              </div>
-              <div className="cert-content">
-                <h3 className="cert-title">{cert.title}</h3>
-                <p className="cert-issuer">
-                  <i className="fas fa-building"></i> {cert.issuer}
-                </p>
-                <p className="cert-date">
-                  <i className="fas fa-calendar"></i> {cert.date}
-                </p>
-                <p className="cert-description">{cert.description}</p>
-                {cert.image && (
-                  <div className="cert-actions">
-                    <button onClick={() => openModal(cert)} className="btn-view">View Certificate</button>
-                    <Link to={`/certificate?img=${encodeURIComponent(cert.image)}&title=${encodeURIComponent(cert.title)}`} className="btn-view" style={{ marginLeft: 8 }}>Open Page</Link>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
+          {certifications.map((cert, index) => {
+            const linkUrl = `/certificate?img=${encodeURIComponent(cert.image)}&title=${encodeURIComponent(cert.title)}`;
+            return (
+              <Link
+                to={linkUrl}
+                key={index}
+                className={`certification-card ${visibleCards.includes(index) ? 'animate-scale-in visible' : ''}`}
+                style={{ animationDelay: `${index * 0.2}s` }}
+              >
+                <div className="cert-icon" style={{ background: `linear-gradient(135deg, ${cert.color} 0%, #8b5cf6 100%)` }}>
+                  <i className={cert.icon}></i>
+                </div>
+                <div className="cert-content">
+                  <h3 className="cert-title">{cert.title}</h3>
+                  <p className="cert-issuer">
+                    <i className="fas fa-building"></i> {cert.issuer}
+                  </p>
+                  <p className="cert-date">
+                    <i className="fas fa-calendar"></i> {cert.date}
+                  </p>
+                  <p className="cert-description">{cert.description}</p>
+                  {cert.image && (
+                    <div className="cert-actions">
+                      <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); openModal(cert); }} className="btn-view">View Certificate</button>
+                      <Link to={linkUrl} className="btn-view" style={{ marginLeft: 8 }} onClick={(e) => e.stopPropagation()}>Open Page</Link>
+                    </div>
+                  )}
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
       {modalImg && (
