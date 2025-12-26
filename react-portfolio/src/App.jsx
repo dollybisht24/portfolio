@@ -2,7 +2,6 @@ import React from 'react';
 import Navigation from './components/Navigation';
 import Hero from './components/Hero';
 import About from './components/About';
-import Skills from './components/Skills';
 import Projects from './components/Projects';
 import Certifications from './components/Certifications';
 import GitHubStats from './components/GitHubStats';
@@ -18,7 +17,6 @@ function App() {
       <Navigation />
       <Hero />
       <About />
-      <Skills />
       <Projects />
       <Certifications />
       <GitHubStats />
