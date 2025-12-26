@@ -603,10 +603,18 @@ section {
     margin: 0 auto;
 }
 
+.section-subtitle {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+}
+
 /* === ABOUT SECTION === */
 .about {
     background: var(--bg-secondary);
 }
+
+.about .container { padding-top: 20px; padding-bottom: 20px; }
 
 .about-content {
     display: grid;
