@@ -643,17 +643,14 @@
                 <!-- GitHub Profile Trophy section removed -->
                 
                 <!-- Real Contribution Graph removed -->
-                <!-- Profile Summary Card -->
-                <div class="github-profile-summary">
+                <!-- Dynamic Profile Summary Card -->
+                <div id="githubProfileCard" class="github-profile-summary">
                     <h3 class="stat-card-title">
                         <i class="fab fa-github"></i>
-                        Profile Summary
+                        GitHub Summary
                     </h3>
-                    <div class="stats-card-wrapper full-width">
-                        <img src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=dollybisht24&theme=tokyonight" 
-                             alt="Dolly's Profile Summary" 
-                             loading="lazy"
-                             class="github-stat-img">
+                    <div class="stats-card-wrapper full-width" id="githubProfileContent">
+                        <div class="github-profile-loading">Loading GitHub data…</div>
                     </div>
                 </div>
                 

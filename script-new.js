@@ -116,6 +116,66 @@ class Navigation {
     }
 }
 
+// ========== GITHUB PROFILE FETCHER ==========
+function renderGitHubProfile(username = 'dollybisht24') {
+    const container = document.getElementById('githubProfileContent');
+    if (!container) return;
+
+    container.innerHTML = '<div class="github-profile-loading">Loading GitHub data…</div>';
+
+    // Fetch basic user data
+    fetch(`https://api.github.com/users/${username}`)
+        .then(res => {
+            if (!res.ok) throw new Error('GitHub API error');
+            return res.json();
+        })
+        .then(user => {
+            // Fetch repos to get top starred repos
+            fetch(`https://api.github.com/users/${username}/repos?per_page=100`) 
+                .then(r => r.json())
+                .then(repos => {
+                    repos = Array.isArray(repos) ? repos : [];
+                    const top = repos.sort((a,b) => b.stargazers_count - a.stargazers_count).slice(0,3);
+
+                    const profileHTML = `
+                        <div class="github-card">
+                            <div class="github-card-left">
+                                <img src="${user.avatar_url}" alt="${user.login} avatar" class="github-avatar" />
+                            </div>
+                            <div class="github-card-right">
+                                <h3 class="github-name"><a href="${user.html_url}" target="_blank" rel="noopener noreferrer">${user.name || user.login}</a></h3>
+                                <p class="github-bio">${user.bio || ''}</p>
+                                <ul class="github-stats-list">
+                                    <li><strong>${user.public_repos}</strong> Repos</li>
+                                    <li><strong>${user.followers}</strong> Followers</li>
+                                    <li><strong>${user.following}</strong> Following</li>
+                                </ul>
+                                <div class="github-top-repos">
+                                    <h4>Top Repos</h4>
+                                    <ul>
+                                        ${top.map(r => `<li><a href="${r.html_url}" target="_blank" rel="noopener noreferrer">${r.name}</a> ${r.stargazers_count ? `&nbsp;⭐${r.stargazers_count}` : ''}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    container.innerHTML = profileHTML;
+                })
+                .catch(() => {
+                    container.innerHTML = `<p class="github-error">Failed to load repositories.</p>`;
+                });
+        })
+        .catch(() => {
+            container.innerHTML = `<p class="github-error">Failed to load GitHub profile. Visit <a href="https://github.com/${username}" target="_blank" rel="noopener noreferrer">${username}</a></p>`;
+        });
+}
+
+// Initialize on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+    renderGitHubProfile('dollybisht24');
+});
+
 // ========== ANIMATIONS ==========
 class ScrollAnimations {
     constructor() {
