@@ -402,6 +402,27 @@ body.dark-mode .theme-toggle .fa-moon {
     position: relative;
 }
 
+/* Profile card in hero (replaces code-window visual) */
+.profile-card {
+    display: flex;
+    gap: var(--spacing-lg);
+    align-items: center;
+}
+.profile-photo {
+    width: 220px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    border: 4px solid rgba(255,255,255,0.6);
+    background: white;
+}
+.profile-meta { max-width: 360px; }
+.profile-name { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 6px; }
+.profile-role { color: var(--primary); font-weight: 600; margin-bottom: 8px; }
+.profile-summary { color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px; }
+.profile-links .social-icon { width: 44px; height:44px; display:inline-flex; align-items:center; justify-content:center; margin-right:8px; }
+
 .code-window {
     background: var(--bg-secondary);
     border-radius: var(--radius-lg);
