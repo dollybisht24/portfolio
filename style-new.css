@@ -1063,20 +1063,17 @@ section {
 
 .project-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(99, 102, 241, 0.95);
+    inset: 0;
+    /* subtle dim layer to hide underlying large text in preview images */
+    background: linear-gradient(rgba(6,10,20,0.18), rgba(6,10,20,0.18));
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0;
-    transition: opacity var(--transition);
+    z-index: 2;
 }
 
-.project-card:hover .project-overlay {
-    opacity: 1;
+.project-overlay .overlay-content {
+    z-index: 3; /* keep icons above dim layer */
 }
 
 .overlay-content {
@@ -1091,15 +1088,18 @@ section {
     border-radius: 50%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: var(--primary);
-    font-size: 1.25rem;
-    text-decoration: none;
-    transition: all var(--transition);
+.project-preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition), opacity 0.3s ease;
+    /* Dim preview image so any embedded text is not prominent */
+    opacity: 0.12;
 }
-
-.project-link:hover {
-    transform: scale(1.1);
+.project-card:hover .project-preview-img {
+    transform: scale(1.03);
+    opacity: 0.14;
+}
 }
 
 .project-content {
