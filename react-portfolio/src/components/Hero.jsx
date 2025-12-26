@@ -49,8 +49,9 @@ const Hero = () => {
               <span className="cursor">|</span>
             </h2>
             <p className="hero-description">
-              Crafting responsive and user-friendly web experiences with modern technologies. 
-              Passionate about clean code, continuous learning, and solving real-world problems through development.
+              I am a passionate Frontend Developer skilled in React, JavaScript, HTML, and CSS, with hands-on
+              experience building responsive and interactive web applications. This portfolio highlights my
+              projects, GitHub activity, and continuous learning journey in frontend development.
             </p>
             <div className="hero-buttons">
               <a href="/projects.html" className="btn btn-primary">
