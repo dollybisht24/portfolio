@@ -14,7 +14,8 @@ const Projects = () => {
       category: 'JavaScript',
       liveLink: 'https://blog21313.netlify.app/',
       githubLink: 'https://github.com/dollybisht24',
-      image: '/images/projects/blog.svg'
+      image: '/images/projects/blog.svg',
+      categoryImg: '/images/projects/blog.svg'
     },
     {
       title: 'Nykaa Clone',
@@ -23,7 +24,8 @@ const Projects = () => {
       category: 'JavaScript',
       liveLink: 'https://quiz12as.netlify.app/',
       githubLink: 'https://github.com/dollybisht24/makup-F',
-      image: '/images/projects/quiz.svg'
+      image: '/images/projects/quiz.svg',
+      categoryImg: '/images/projects/quiz.svg'
     },
     {
       title: 'Food Ordering Website',
@@ -32,7 +34,8 @@ const Projects = () => {
       category: 'HTML-CSS',
       liveLink: 'https://recat23.netlify.app/',
       githubLink: 'https://github.com/dollybisht24/food-f',
-      image: '/images/projects/react.svg'
+      image: '/images/projects/react.svg',
+      categoryImg: '/images/projects/react.svg'
     }
     ,
     {
@@ -42,7 +45,8 @@ const Projects = () => {
       category: 'JavaScript',
       liveLink: 'https://todo1gr.netlify.app/',
       githubLink: '#',
-      image: '/images/projects/todo.svg'
+      image: '/images/projects/todo.svg',
+      categoryImg: '/images/projects/todo.svg'
     }
   ];
 
@@ -127,6 +131,9 @@ const Projects = () => {
                   className="project-image"
                   loading="lazy"
                 />
+                {project.categoryImg && (
+                  <img src={project.categoryImg} alt="category" className="project-category-img" aria-hidden="true" />
+                )}
                 <div className="project-overlay">
                   <div className="overlay-buttons">
                     {project.liveLink && (
