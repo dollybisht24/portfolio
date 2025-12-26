@@ -132,6 +132,7 @@ const Certifications = () => {
                 {cert.image && (
                   <div className="cert-actions">
                     <button onClick={() => openModal(cert)} className="btn-view">View Certificate</button>
+                    <Link to={`/certificate?img=${encodeURIComponent(cert.image)}&title=${encodeURIComponent(cert.title)}`} className="btn-view" style={{ marginLeft: 8 }}>Open Page</Link>
                   </div>
                 )}
               </div>
