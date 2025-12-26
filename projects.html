@@ -27,7 +27,7 @@
     </div>
 </nav>
 
-<section class="projects" id="projects-page">
+<section class="projects" id="projects">
     <div class="container">
         <div class="section-header">
             <span class="section-label">Featured</span>
@@ -125,5 +125,25 @@
 </footer>
 
 <script src="script-new.js"></script>
+<script>
+// Quick runtime check: ensure projects grid is visible
+document.addEventListener('DOMContentLoaded', () => {
+    const grid = document.querySelector('.projects-grid');
+    console.log('Projects grid element:', grid);
+    if (!grid) {
+        console.error('Projects grid not found on the page');
+    } else {
+        // make sure it's not hidden by CSS
+        const style = getComputedStyle(grid);
+        console.log('Projects grid display:', style.display, 'visibility:', style.visibility, 'opacity:', style.opacity);
+        if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) === 0) {
+            grid.style.display = 'grid';
+            grid.style.visibility = 'visible';
+            grid.style.opacity = '1';
+            console.warn('Adjusted projects grid inline styles to ensure visibility');
+        }
+    }
+});
+</script>
 </body>
 </html>
