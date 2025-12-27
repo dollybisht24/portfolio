@@ -111,15 +111,7 @@ const Certifications = () => {
           })}
         </div>
       </div>
-      {modalImg && (
-        <div className="cert-modal" role="dialog" aria-modal="true" aria-label={modalTitle} onClick={closeModal}>
-          <div className="cert-modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="cert-modal-close" onClick={closeModal} aria-label="Close">×</button>
-            <h3 className="section-title" style={{ marginBottom: 12 }}>{modalTitle}</h3>
-            <img src={modalImg} alt={modalTitle} style={{ maxWidth: '100%', borderRadius: 8 }} />
-          </div>
-        </div>
-      )}
+      {/* modal removed intentionally; certificate view handled on /certificate route */}
     </section>
   );
 };
